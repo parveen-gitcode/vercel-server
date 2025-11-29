@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import connectDB from "./configs/db.js";
+
 import userRouter from "./routes/userRoutes.js";
 import chatRouter from "./routes/chatRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
@@ -10,33 +11,23 @@ import { stripeWebhooks } from "./controllers/webhooks.js";
 
 const app = express();
 
+// ------------------ CONNECT DATABASE ------------------
 await connectDB();
 
-// Stripe Webhooks
-app.post(
-  "/api/stripe",
-  express.raw({ type: "application/json" }),
-  stripeWebhooks
-);
-
-// Middleware
-// Configure CORS to allow local development and the deployed frontend.
-// Ensure preflight (OPTIONS) responses include the proper Access-Control headers
-// and allow the Authorization header used for Bearer tokens.
+// ------------------ CORS (allowlist) ------------------
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
   "https://ai-instant-chatpage-enur62bnu-parveen-dudekulas-projects.vercel.app",
   "https://parveen-aichatpage.vercel.app",
-  // Add the actual deployed client URL (the origin shown in your screenshots)
   "https://vercel-client-t4il.vercel.app",
+  "https://vercel-client-t4il.vercel.app/",
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow non-browser requests (e.g. curl, Postman) which have no origin
-      if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true); // allow server-to-server, Postman
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("CORS policy: Origin not allowed"));
     },
@@ -46,23 +37,36 @@ app.use(
   })
 );
 
-// Parse JSON bodies for routes (after webhook which needs raw)
+// ------------------ STRIPE WEBHOOK (raw body) ------------------
+app.post(
+  "/api/stripe",
+  express.raw({ type: "application/json" }),
+  stripeWebhooks
+);
+
+// ------------------ JSON parser ------------------
 app.use(express.json());
 
-// Routes
+// ------------------ ROUTES ------------------
 app.get("/", (req, res) => res.send("Server is Live! 🚀"));
+
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/credit", creditRouter);
 
-const PORT = process.env.PORT || 3000;
+// ------------------ START SERVER (local only) ------------------
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(
-    `Server is running on port ${PORT} ... http://localhost:${PORT} 🍽️`
+if (!process.env.VERCEL) {
+  app.listen(PORT, () =>
+    console.log(`Server is running on port ${PORT} ... http://localhost:${PORT}`)
   );
-});
+}
+
+// Export app for serverless platforms (Vercel)
+export default app;
+
 
 
 /*import express from "express";
