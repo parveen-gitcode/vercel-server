@@ -18,8 +18,7 @@ await connectDB();
 // ------------------ CORS (allowlist) ------------------
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:5000",
-  "https://vercel-client-topaz.vercel.app"
+  "http://localhost:5000"
 ];
 
 app.use(
