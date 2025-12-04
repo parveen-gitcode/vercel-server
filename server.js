@@ -19,7 +19,8 @@ await connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5000",
-  "https://aichatpage.vercel.app"
+  "https://aichatpage.vercel.app",
+  "https://ai-chatpage-parveen.vercel.app"
 ];
 
 app.use(
