@@ -18,11 +18,7 @@ await connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://aichatpage.vercel.app",
-  "https://ai-instant-chatpage-enur62bnu-parveen-dudekulas-projects.vercel.app",
-  "https://parveen-aichatpage.vercel.app",
-  "https://vercel-client-t4il.vercel.app",
-  "https://vercel-client-t4il.vercel.app/",
+  "https://vercel-server-3m9y.vercel.app",
 ];
 
 app.use(
