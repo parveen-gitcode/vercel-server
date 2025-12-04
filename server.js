@@ -18,7 +18,8 @@ await connectDB();
 // ------------------ CORS (allowlist) ------------------
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:5000"
+  "http://localhost:5000",
+  "https://aichatpage.vercel.app"
 ];
 
 app.use(
