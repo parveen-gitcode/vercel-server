@@ -18,7 +18,7 @@ await connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://vercel-server-3m9y.vercel.app",
+  "https://vercel-server-1.onrender.com",
 ];
 
 app.use(
